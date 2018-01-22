@@ -1,4 +1,4 @@
-# ACIC 2018 poster: Stochastic Treatment Shifting with Case-Control Sampling
+# ACIC 2018: Stochastic Treatment Shifts and Case-Control Sampling
 
 ---
 
