@@ -1,0 +1,260 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% baposter Landscape Poster
+% LaTeX Template
+% Version 1.0 (11/06/13)
+%
+% baposter Class Created by:
+% Brian Amberg (baposter@brian-amberg.de)
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+% PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[landscape,a0paper,fontscale=0.285]{baposter} % Adjust font scale/size
+
+\usepackage{graphicx} % Required for including images
+\graphicspath{{figs/}} % Directory in which figures are stored
+
+\usepackage{amsmath} % For typesetting math
+\usepackage{amssymb} % Adds new symbols to be used in math mode
+\usepackage{mathtools}
+
+\usepackage[numbers]{natbib}
+
+\usepackage{booktabs} % Top and bottom rules for tables
+\usepackage{enumitem} % Used to reduce itemize/enumerate spacing
+\usepackage{palatino} % Use the Palatino font
+\usepackage[font=small,labelfont=bf]{caption} % Required for specifying captions to tables and figures
+
+\usepackage{multicol} % Required for multiple columns
+\setlength{\columnsep}{1.5em} % Slightly increase the space between columns
+\setlength{\columnseprule}{0mm} % No horizontal rule between columns
+
+\newcommand{\compresslist}{ % Define a command to reduce spacing within itemize enumerate environments, this is used right after \begin{itemize} or \begin{enumerate}
+\setlength{\itemsep}{1pt}
+\setlength{\parskip}{0pt}
+\setlength{\parsep}{0pt}
+}
+
+\definecolor{lightblue}{rgb}{0.145,0.6666,1} % Defines color of content box headers
+
+\begin{document}
+
+\begin{poster} {
+headerborder=closed, % Adds a border around the header of content boxes
+colspacing=1em, % Column spacing
+bgColorOne=white, % Background color for the gradient on the left side of the poster
+bgColorTwo=white, % Background color for the gradient on the right side of the poster
+borderColor=lightblue, % Border color
+headerColorOne=black, % Background color for the header in the content boxes (left side)
+headerColorTwo=lightblue, % Background color for the header in the content boxes (right side)
+headerFontColor=white, % Text color for the header text in the content boxes
+boxColorOne=white, % Background color of the content boxes
+textborder=roundedleft, % Format of the border around content boxes, can be: none, bars, coils, triangles, rectangle, rounded, roundedsmall, roundedright or faded
+eyecatcher=true, % Set to false for ignoring the left logo in the title and move the title left
+headerheight=0.1\textheight, % Height of the header
+headershape=roundedright, % Specify the rounded corner in the content box headers, can be: rectangle, small-rounded, roundedright, roundedleft or rounded
+headerfont=\Large\bf\textsc, % Large, bold and sans serif font in the headers of content boxes
+%textfont={\setlength{\parindent}{1.5em}}, % Uncomment for paragraph indentation
+linewidth=2pt % Width of the border lines around content boxes
+}
+%----------------------------------------------------------------------------------------
+% TITLE SECTION
+%----------------------------------------------------------------------------------------
+%
+{\includegraphics[height=6.5em]{logo_cal.jpg}} % First university/lab logo on the left
+{\bf\textit{\LARGE Robust Nonparametric Inference for Stochastic Interventions
+    Under Multi-Stage Sampling}\vspace{0.01em}} % Poster title
+{\textbf{Nima S.~Hejazi, Mark J.~van der Laan, Holly E.~Janes, Peter B.~Gilbert,
+    and David C.~Benkeser} \\ \textit{Group in Biostatistics \& Department of
+    Statistics, University of California, Berkeley}} % Author names and institution
+{\includegraphics[height=6.5em]{logo_sph.jpg}} % Second university/lab logo on the right
+
+%-------------------------------------------------------------------------------
+% OVERVIEW
+%-------------------------------------------------------------------------------
+
+\headerbox{Overview \& Motivations}{name=overview,column=0,row=0}{
+
+\begin{enumerate}\compresslist
+\setlength\itemsep{0.75em}
+\item We consider the problem of efficiently estimating survival prognosis under
+  a data structure complicated by the presence of immortal time bias.
+\item The matter of efficient estimation under a bias induced by time-dependent
+  risks presents a novel challenge that received surprisingly meager attention
+  in the literature.
+\item We compare parametric and nonparametric estimators of survival, including
+  variations of the Cox proportional hazards model and the Kaplan-Meier
+  estimator, evaluating the efficiency of each in the estimation of
+  the multiple survival processes that occur under this data-generating process.
+\item We are given survival times for patients with a single primary melanoma,
+  and some of the patients develop a second primary melanoma before dying.
+\end{enumerate}
+
+%\vspace{0.3em} % When there are two boxes, some whitespace may need to be added
+               % if the one on the right has more content
+}
+
+%-------------------------------------------------------------------------------
+% INTRODUCTION
+%-------------------------------------------------------------------------------
+
+\headerbox{Introduction \& Data}
+{name=introduction,column=1,row=0,bottomaligned=overview}{
+
+\begin{itemize}\compresslist
+\setlength\itemsep{0.75em}
+\item Question of interest: \textbf{How does the second melanoma change the
+    survival prognosis of the patients?}
+\item In order to prepare for a real data analysis, we simulate a data structure
+  that matches what we expect --- that is, the data-generating process is the
+  the Cox proportional hazards model.
+\item Survival time $T$: time before the actual death of the patient,
+\item Time until second melanoma appears: $U$,
+\item Baseline hazard in absence of second melanoma: $\lambda_0(t)$,
+\item Time-varying covariate: $Z(t) = I(t > U)$.
+\item Constant baseline hazard $\lambda_0 = \lambda$.
+\item A second melanoma doubles the hazard.
+\end{itemize}
+}
+
+%-------------------------------------------------------------------------------
+% Methodology cont.
+%-------------------------------------------------------------------------------
+
+\headerbox{Methodology II}{name=results,column=2,span=2,row=0}{
+
+
+\vspace{-0.35em}
+\begin{itemize}
+\item The second approach is non-parametric and uses Kaplan-Meier's estimator
+  defined as
+\end{itemize}
+\begin{equation*}
+\widehat{S}(t) = \prod_{i : t(i) < t} \left(1 - \frac{d_i}{n_i}\right), \quad
+t\geq 0,
+\end{equation*}
+where $d_i$ and $n_i$ are the respective numbers of death and individual at
+risks at the ordered time $t^{(i)}, \ i = 1, \ldots, n$.
+\begin{itemize}
+\item Youlden et al. \cite{youlden2016ten} only uses patients for whom no
+  occurrence of a second melanoma is observed, in the estimation of $S_1$ and
+  ignores the other patients, which causes a bias.
+\item Jewell corrects their estimator by including all the patients in the
+  study.
+\item The ones that were excluded by Youlden et al. \cite{youlden2016ten} still
+  contain information about $\lambda_1$: those are censored observations at time
+  $U$.
+\end{itemize}
+}
+
+%-------------------------------------------------------------------------------
+% REFERENCES
+%-------------------------------------------------------------------------------
+
+\headerbox{Principal References}{name=references,column=2,above=bottom}{
+\renewcommand{\section}[2]{\vskip 0.05em} % remove "References" section title
+\nocite{*} % Insert publications even if they are not cited in the poster
+\tiny{ % Reduce the font size in this block
+\setlength{\bibsep}{1pt}
+\bibliographystyle{unsrt}
+\bibliography{2018_acic}\compresslist
+}
+}
+
+%-------------------------------------------------------------------------------
+% CONTACT
+%-------------------------------------------------------------------------------
+
+\headerbox{Contact Information}{name=ack,column=3,aligned=references,above=bottom}{
+% This block is as tall as the references block
+  \textbf{N.~Hejazi}: \textsc{nhejazi@berkeley.edu} \\
+  \textbf{M.J..~van der Laan}: \textsc{laan@berkeley.edu} \\
+  \textbf{D.~C.~Benkeser}: \textsc{benkeser@emory.edu}
+}
+
+%-------------------------------------------------------------------------------
+% CONCLUSION
+%-------------------------------------------------------------------------------
+
+\headerbox{Results \& Discussion}
+{name=conclusion,column=2,span=2,row=0,below=results,above=references}{
+
+\vspace{1em}
+\begin{multicols}{2}
+
+\begin{center}
+\vspace*{-0.45cm}
+\includegraphics[scale=0.5]{s1_estim_compare}
+\vspace{-1.5em}
+\captionof{figure}{Average performance of estimators for $S_1$ for a sample of
+ size $n = 1000$, over about $300$ simulations.}
+\end{center}
+
+\vspace{3em}
+
+\begin{itemize}
+  \setlength\itemsep{0.2em}
+  \item The Kaplan-Meier estimator proposed by Youlden displays obvious bias.
+  \item The estimates of the survival curve produced by Cox regression and the
+    Kaplan-Meier estimator with the Jewell correction show no such bias.
+  \item Under the Cox model, Cox regression will outperform other estimators ---
+    it draws upon information across both subject groups over all time points.
+  \item The Kaplan-Meier estimator exhibits a slight divergence from the truth
+    in the right tail due to a well-studied finite-sample bias caused by
+    censored observations.
+  \item We display results for $n = 1000$ since this sample size is closest to
+    that from the observational medical study we analyze.
+\end{itemize}
+
+\end{multicols}
+
+}
+
+%-------------------------------------------------------------------------------
+% METHODS
+%-------------------------------------------------------------------------------
+
+\headerbox{Methodology I}{name=method,column=0,span=2,below=overview,bottomaligned=references}{
+% This block's bottom aligns with the bottom of the conclusion block
+
+\begin{itemize}
+\item Time origin for all sujects: date of their first or index primary melanoma
+  (PM).
+\item Two hazard functions of essential interest:
+\item $\lambda_1(t)$ --- hazard of an individual, alive at time $t$ who has only
+  experienced one PM.
+\item $\lambda_2(t)$ --- hazard of
+an individual, alive at time $t$ who has experienced more than one PM.
+\item Data: of $n = n_1 + n_2$ subjects.
+\item The first $n_1$ only experience one PM before death at the observed time
+  $t_i$. The other $n_2$ experience a second PM at the observed time $u_j$ and
+  then die at observed time $t_j$. It is possible to consider censored
+  observations for both sets of subjects but we do not discuss this here for the
+  sake of notation.
+\item We compare three approaches of this problem, namely, the Cox proportional
+  hazards model, the method presented in Youlden et al. \cite{youlden2016ten}
+  and its correction by Jewell.
+\end{itemize}
+
+The basic proportional hazards model is a semi-parametric model for the hazard
+function defined by
+\begin{equation}
+\lambda\left(t; Z = z\right) = \lambda_0(t) \exp\left(\beta^Tz\right), \quad
+t\geq 0.
+\end{equation}
+where $\lambda_0(\cdot)$ is the baseline hazard function is estimated
+non-parametrically, while $\beta$ is the vector of regression coefficients and
+is estimated parametrically using Cox's partial likelihood.
+}
+
+%-------------------------------------------------------------------------------
+
+\end{poster}
+\end{document}
+
