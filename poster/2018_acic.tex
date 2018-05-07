@@ -149,24 +149,29 @@ linewidth=2pt % Width of the border lines around content boxes
 
 \vspace{-0.35em}
 \begin{itemize}
-\item The second approach is non-parametric and uses Kaplan-Meier's estimator
-  defined as
-\end{itemize}
-\begin{equation*}
-\widehat{S}(t) = \prod_{i : t(i) < t} \left(1 - \frac{d_i}{n_i}\right), \quad
-t\geq 0,
-\end{equation*}
-where $d_i$ and $n_i$ are the respective numbers of death and individual at
-risks at the ordered time $t^{(i)}, \ i = 1, \ldots, n$.
-\begin{itemize}
-\item Youlden et al. \cite{youlden2016ten} only uses patients for whom no
-  occurrence of a second melanoma is observed, in the estimation of $S_1$ and
-  ignores the other patients, which causes a bias.
-\item Jewell corrects their estimator by including all the patients in the
-  study.
-\item The ones that were excluded by Youlden et al. \cite{youlden2016ten} still
-  contain information about $\lambda_1$: those are censored observations at time
-  $U$.
+\item In the HVTN 505 HIV-1 trial, all infected individuals are matched to
+  controls using a complex mechanism, which makes the observed data structure
+  \textbf{$O = (W, \Delta A, Y)$}, where
+  \begin{itemize}
+    \itemsep0.25pt
+    \item $V = (W, Y)$ is the set of variables defining the sampling mechanism,
+    \item $\Delta = f(V) \in \{0, 1\}$ is the missingness mechanism introduced
+      by sampling,
+    \item $\Pi_0(V) = \mathbb{P}(\Delta = 1 \mid V)$, letting $\Pi_n(V)$ be an
+      estimator of $\Pi_0(V)$.
+  \end{itemize}
+\item An IPCW-TMLE, introduced by \cite{rose2011targeted2sd}, augments the loss
+  function with IPC weights to overcome the problem introduced by sampling:
+  $\mathcal{L}(P_X)(O) = \frac{\Delta}{\Pi_n(V)}\mathcal{L}^F(P_X)(X)$, for full
+  data $X = (W, A, Y)$.
+\item When working in a nonparametric model, the efficient influence function
+  estimating equation is complexified by sampling:
+  $0 = P_n \frac{\Delta}{\Pi_n^*(V)}D^F(P^*_{X,n}) -
+    \left\{\frac{\Delta}{\Pi_n^*(V)} - 1 \right\} \mathbb{E}_n(D^F(P^0_{X,n})
+    \mid \Delta = 1, V)$.
+\item Fortuitously, this augmented estimator exhibits a unique form of
+  \textit{multiple double robustness} --- through combinations of the terms
+  $(g, Q)$ and $(\Pi, \mathbb{E}_0(D^F(P^F) \mid V))$.
 \end{itemize}
 }
 
@@ -182,7 +187,7 @@ risks at the ordered time $t^{(i)}, \ i = 1, \ldots, n$.
 \nocite{*} % Insert publications even if they are not cited in the poster
 \bibliography{2018_acic}
 \compresslist
-\vspace{-0.75em}
+\vspace{-0.7em}
 }
 }
 
@@ -285,7 +290,9 @@ D(P)(o) = H(a, w){y - \overline{Q}(a, w)} + \overline{Q}(d(a, w), w) - \Psi(P),
 \end{equation}
 where the auxiliary term, $H(a,w)$, takes the form
   $H(a,w) = \mathbb{I}(a < u(w)) \frac{g_0(a - \delta \mid w)}{g_0(a \mid w)} +
-    \mathbb{I}(a \geq u(w) - \delta)$
+    \mathbb{I}(a \geq u(w) - \delta)$.\\[0.5em]
+We obtain Wald-style inference via the limiting distribution:
+$\sqrt{n}(\Psi_n - \Psi) \to N(0, \text{Var}(D(P_0)))$.
 }
 
 %-------------------------------------------------------------------------------
