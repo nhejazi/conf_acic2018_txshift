@@ -67,15 +67,15 @@ linewidth=2pt % Width of the border lines around content boxes
 % TITLE SECTION
 %----------------------------------------------------------------------------------------
 %
-{\includegraphics[height=6.5em]{logo_cal.jpg}} % First university/lab logo on the left
+{\includegraphics[height=6.5em]{logo_berkeley.jpg}} % First university/lab logo on the left
 {\bf\textit{\LARGE Robust Nonparametric Inference for Stochastic Interventions
     Under Multi-Stage Sampling}\vspace{0.01em}} % Poster title
 {\textbf{Nima S.~Hejazi, Mark J.~van der Laan, and David C.~Benkeser} \\
   \textit{Group in Biostatistics \& Department of Statistics, University of
     California, Berkeley} \\
-  \textit{Department of Biostatistics and Computational Biology, Emory
-    University}} % Author names and institution
-{\includegraphics[height=6.5em]{logo_sph.jpg}} % Second university/lab logo on the right
+  \textit{Department of Biostatistics and Bioinformatics, Emory University}}
+    % Author names and institution
+{\includegraphics[height=6.5em]{logo_emory.jpg}} % Second university/lab logo on the right
 
 %-------------------------------------------------------------------------------
 % OVERVIEW
@@ -99,9 +99,10 @@ linewidth=2pt % Width of the border lines around content boxes
   \end{itemize}
 \item The proposed nonparametric estimation procedure provably attains fast
   convergence rates even when incorporating machine learning estimators.
-\item A recent software implementation --- the ``txshift'' R package --- has
-  been developed for applying this methodology very generally, including for
-  causal inference and variable importance analyses.
+\item A recent software implementation --- the ``\textit{txshift}'' R package
+  \cite{hejazi2018txshift} --- has been developed for applying this methodology
+  in complete generality, including for causal inference and variable importance
+  analyses.
 \end{enumerate}
 
 %\vspace{0.3em} % When there are two boxes, some whitespace may need to be added
@@ -112,7 +113,7 @@ linewidth=2pt % Width of the border lines around content boxes
 % INTRODUCTION
 %-------------------------------------------------------------------------------
 
-\headerbox{Introduction \& Data}
+\headerbox{Data: HIV Vaccine Trials}
 {name=introduction,column=1,row=0,bottomaligned=overview}{
 
 \begin{itemize}\compresslist
@@ -123,15 +124,15 @@ linewidth=2pt % Width of the border lines around content boxes
 \item \textit{Question of interest:} \textbf{How does risk of HIV infection
    differ under posited shifts of the distribution of an immune response in the
    vaccine arm of an efficacy trial?}
-\item We simulate a data structure similar to that in the HVTN 505 HIV-1
-  efficacy trial:
+\item We simulate a data structure based on the HVTN 505 HIV-1 efficacy trial,
+  as in \cite{janes2017higher}:
   \begin{itemize}
     \itemsep0.5pt
     \item About 2500 participants, with all observed cases matched to controls.
     \item Background $(W)$: sex, age, BMI, etc.
-    \item Intervention $(A)$: immunomarkers (i.e., T-Cell profiles from ICS
-      assay on HIV-1-stimulated PBMCs).
-    \item Outcome $(Y)$: HIV-1 infection risk.
+    \item Intervention $(A)$: immunobiomarkers (i.e., T-Cell profiles from ICS
+      assays on preserved HIV-1-stimulated PBMCs).
+    \item Outcome $(Y)$: HIV-1 infection status.
   \end{itemize}
 \item \textit{Takeaway:} \textbf{Variable importance measure for ranking
    multiple immune responses by their utility as immunogenicity study endpoints
@@ -143,8 +144,8 @@ linewidth=2pt % Width of the border lines around content boxes
 % Methodology cont.
 %-------------------------------------------------------------------------------
 
-\headerbox{Methodology II}{name=results,column=2,span=2,row=0}{
-
+\headerbox{Methodology II: Corrections for Multi-Stage Sampling}{name=results,
+  column=2,span=2,row=0}{
 
 \vspace{-0.35em}
 \begin{itemize}
@@ -175,11 +176,13 @@ risks at the ordered time $t^{(i)}, \ i = 1, \ldots, n$.
 
 \headerbox{Principal References}{name=references,column=2,above=bottom}{
 \renewcommand{\section}[2]{\vskip 0.05em} % remove "References" section title
-\nocite{*} % Insert publications even if they are not cited in the poster
 \tiny{ % Reduce the font size in this block
-\setlength{\bibsep}{1pt}
-\bibliographystyle{unsrt}
-\bibliography{2018_acic}\compresslist
+\setlength{\bibsep}{0.25pt}
+\bibliographystyle{plainnat}
+\nocite{*} % Insert publications even if they are not cited in the poster
+\bibliography{2018_acic}
+\compresslist
+\vspace{-0.75em}
 }
 }
 
@@ -189,9 +192,15 @@ risks at the ordered time $t^{(i)}, \ i = 1, \ldots, n$.
 
 \headerbox{Contact Information}{name=ack,column=3,aligned=references,above=bottom}{
 % This block is as tall as the references block
-  \textbf{N.S.~Hejazi}: \textsc{nhejazi@berkeley.edu} \\
-  \textbf{M.J.~van der Laan}: \textsc{laan@berkeley.edu} \\
-  \textbf{D.~C.~Benkeser}: \textsc{benkeser@emory.edu}
+\begin{itemize}
+  \itemsep0.25pt
+  \item \textbf{N.S.~Hejazi}, Ph.D.~student, Group in Biostatistics,
+    \textsc{nhejazi@berkeley.edu}
+  \item \textbf{M.J.~van der Laan}, Professor of Biostatistics \& Statistics,
+    \textsc{laan@berkeley.edu}
+  \item \textbf{D.C.~Benkeser}: Assistant Professor of Biostatistics,
+    \textsc{benkeser@emory.edu}
+\end{itemize}
 }
 
 %-------------------------------------------------------------------------------
@@ -201,65 +210,82 @@ risks at the ordered time $t^{(i)}, \ i = 1, \ldots, n$.
 \headerbox{Results \& Discussion}
 {name=conclusion,column=2,span=2,row=0,below=results,above=references}{
 
-\vspace{1em}
+\vspace{0.25em}
 \begin{multicols}{2}
 
 \begin{center}
-\vspace*{-0.45cm}
-\includegraphics[scale=0.5]{s1_estim_compare}
-\vspace{-1.5em}
-\captionof{figure}{Average performance of estimators for $S_1$ for a sample of
- size $n = 1000$, over about $300$ simulations.}
+\vspace*{-0.5cm}
+\includegraphics[scale=0.45]{s1_estim_compare}
+\vspace{-1.75em}
+\captionof{figure}{This figure demonstrates...}
 \end{center}
 
-\vspace{3em}
+\vspace{-1.75em}
 
 \begin{itemize}
-  \setlength\itemsep{0.2em}
-  \item The Kaplan-Meier estimator proposed by Youlden displays obvious bias.
-  \item The estimates of the survival curve produced by Cox regression and the
-    Kaplan-Meier estimator with the Jewell correction show no such bias.
-  \item Under the Cox model, Cox regression will outperform other estimators ---
-    it draws upon information across both subject groups over all time points.
-  \item The Kaplan-Meier estimator exhibits a slight divergence from the truth
-    in the right tail due to a well-studied finite-sample bias caused by
-    censored observations.
-  \item We display results for $n = 1000$ since this sample size is closest to
-    that from the observational medical study we analyze.
+  \itemsep0.05pt
+  \item ...
+  \item ...
+  \item ...
+\end{itemize}
+
+\begin{center}
+\vspace*{-0.93cm}  % CHANGE THIS TO ALIGN IMAGES
+\includegraphics[scale=0.45]{s1_estim_compare}
+\vspace{-1.75em}
+\captionof{figure}{This figure demonstrates...}
+\end{center}
+
+\vspace{-1.75em}
+
+\begin{itemize}
+  \itemsep0.05pt
+  \item ...
+  \item ...
+  \item ...
 \end{itemize}
 
 \end{multicols}
-
 }
 
 %-------------------------------------------------------------------------------
 % METHODS
 %-------------------------------------------------------------------------------
 
-\headerbox{Methodology I}{name=method,column=0,span=2,below=overview,bottomaligned=references}{
+\headerbox{Methodology I: The Effect of a Stochastic
+  Intervention}{name=method,column=0,span=2,below=overview,
+  bottomaligned=references}{
 % This block's bottom aligns with the bottom of the conclusion block
 
 \begin{itemize}
-  \item Consider $O = (W, A, Y) \sim P_0 \in \mathcal{M}$, where no assumptions
-    are placed on the statistical model containing $\mathcal{M}$ containing
-    $P_0$.
+  \itemsep1pt
+  \item Consider $O = (W, A, Y) \sim P_0 \in \mathcal{M}$, with no assumptions
+    placed on the statistical model $\mathcal{M}$.
   \item Rather than a deterministic intervention, consider a shift of the
-    treatment (i.e., instead of $A = a$, consider $A = a + \delta$).
-  \item To compare with the general linear model, the shift $\delta$ may be
-    thought of as analogous to shifts in the slope of the regression line.
+    treatment (i.e., instead of $A = a$, consider a shift of the intervention so
+    that $A = a + \delta$ for an aribtrary $\delta$).
+  \item As a comparison with the general linear model, the shift $\delta$ may be
+    thought of as a part of the nonparametric analog to the slope of a
+    regression line --- i.e., $\beta^{\text{NP}}_{\text{slope}} =
+      \frac{\mathbb{E}[Y \mid A + \delta] - \mathbb{E}[Y \mid A]}{\delta^2}$.
   \item To protect against positivity violations, make the shifting mechanism a
     function of the observed data: $d(a, w) = a + \delta$, if
     $a + \delta < u(w)$ and $d(a, w) = a$ otherwise.
 \end{itemize}
 
-Let's consider a simple statistical target parameter:
+We consider a simple causal target parameter, introduced in
+  \cite{munoz2012population}:
 \begin{equation}
-\Psi(P) = \mathbb{E}_P{\bar{Q}(d(A, W), W)},
+\Psi(P) = \mathbb{E}_{\text{P}}{\overline{Q}(d(A, W), W)},
 \end{equation}
-for which the efficient influence function (EIF) is
+for which the efficient influence function (EIF), given in
+  \cite{diaz2018stochastic}, is
 \begin{equation}
-D(P)(o) = H(a, w){y - \bar{Q}(a, w)} + \bar{Q}(d(a, w), w) - \Psi(P)
+D(P)(o) = H(a, w){y - \overline{Q}(a, w)} + \overline{Q}(d(a, w), w) - \Psi(P),
 \end{equation}
+where the auxiliary term, $H(a,w)$, takes the form
+  $H(a,w) = \mathbb{I}(a < u(w)) \frac{g_0(a - \delta \mid w)}{g_0(a \mid w)} +
+    \mathbb{I}(a \geq u(w) - \delta)$
 }
 
 %-------------------------------------------------------------------------------
