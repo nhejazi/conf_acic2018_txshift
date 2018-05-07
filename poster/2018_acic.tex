@@ -70,9 +70,11 @@ linewidth=2pt % Width of the border lines around content boxes
 {\includegraphics[height=6.5em]{logo_cal.jpg}} % First university/lab logo on the left
 {\bf\textit{\LARGE Robust Nonparametric Inference for Stochastic Interventions
     Under Multi-Stage Sampling}\vspace{0.01em}} % Poster title
-{\textbf{Nima S.~Hejazi, Mark J.~van der Laan, Holly E.~Janes, Peter B.~Gilbert,
-    and David C.~Benkeser} \\ \textit{Group in Biostatistics \& Department of
-    Statistics, University of California, Berkeley}} % Author names and institution
+{\textbf{Nima S.~Hejazi, Mark J.~van der Laan, and David C.~Benkeser} \\
+  \textit{Group in Biostatistics \& Department of Statistics, University of
+    California, Berkeley} \\
+  \textit{Department of Biostatistics and Computational Biology, Emory
+    University}} % Author names and institution
 {\includegraphics[height=6.5em]{logo_sph.jpg}} % Second university/lab logo on the right
 
 %-------------------------------------------------------------------------------
@@ -82,18 +84,24 @@ linewidth=2pt % Width of the border lines around content boxes
 \headerbox{Overview \& Motivations}{name=overview,column=0,row=0}{
 
 \begin{enumerate}\compresslist
-\setlength\itemsep{0.75em}
-\item We consider the problem of efficiently estimating survival prognosis under
-  a data structure complicated by the presence of immortal time bias.
-\item The matter of efficient estimation under a bias induced by time-dependent
-  risks presents a novel challenge that received surprisingly meager attention
-  in the literature.
-\item We compare parametric and nonparametric estimators of survival, including
-  variations of the Cox proportional hazards model and the Kaplan-Meier
-  estimator, evaluating the efficiency of each in the estimation of
-  the multiple survival processes that occur under this data-generating process.
-\item We are given survival times for patients with a single primary melanoma,
-  and some of the patients develop a second primary melanoma before dying.
+\setlength\itemsep{0.5em}
+\item We consider the problem of efficiently estimating the effect of a
+ stochastic shift interventions for problem settings in which multi-stage
+ sampling complicates the observed data structure.
+\item We present a novel approach: an augmented targeted maximum likelihood
+ estimator of a parameter defined as the outcome under a stochastic
+ intervention with
+  \begin{itemize}
+    \item consistency and efficiency guarantees even under multi-stage
+      sampling, and
+    \item a form of multiple double robustness inherited from its constituent
+      parts.
+  \end{itemize}
+\item The proposed nonparametric estimation procedure provably attains fast
+  convergence rates even when incorporating machine learning estimators.
+\item A recent software implementation --- the ``txshift'' R package --- has
+  been developed for applying this methodology very generally, including for
+  causal inference and variable importance analyses.
 \end{enumerate}
 
 %\vspace{0.3em} % When there are two boxes, some whitespace may need to be added
@@ -108,18 +116,26 @@ linewidth=2pt % Width of the border lines around content boxes
 {name=introduction,column=1,row=0,bottomaligned=overview}{
 
 \begin{itemize}\compresslist
-\setlength\itemsep{0.75em}
-\item Question of interest: \textbf{How does the second melanoma change the
-    survival prognosis of the patients?}
-\item In order to prepare for a real data analysis, we simulate a data structure
-  that matches what we expect --- that is, the data-generating process is the
-  the Cox proportional hazards model.
-\item Survival time $T$: time before the actual death of the patient,
-\item Time until second melanoma appears: $U$,
-\item Baseline hazard in absence of second melanoma: $\lambda_0(t)$,
-\item Time-varying covariate: $Z(t) = I(t > U)$.
-\item Constant baseline hazard $\lambda_0 = \lambda$.
-\item A second melanoma doubles the hazard.
+\setlength\itemsep{0.5em}
+\item We illustrate the utility of our approach by applying the new method and
+  software in an investigation of the effects of immune response biomarkers on
+  HIV vaccine efficacy.
+\item \textit{Question of interest:} \textbf{How does risk of HIV infection
+   differ under posited shifts of the distribution of an immune response in the
+   vaccine arm of an efficacy trial?}
+\item We simulate a data structure similar to that in the HVTN 505 HIV-1
+  efficacy trial:
+  \begin{itemize}
+    \itemsep0.5pt
+    \item About 2500 participants, with all observed cases matched to controls.
+    \item Background $(W)$: sex, age, BMI, etc.
+    \item Intervention $(A)$: immunomarkers (i.e., T-Cell profiles from ICS
+      assay on HIV-1-stimulated PBMCs).
+    \item Outcome $(Y)$: HIV-1 infection risk.
+  \end{itemize}
+\item \textit{Takeaway:} \textbf{Variable importance measure for ranking
+   multiple immune responses by their utility as immunogenicity study endpoints
+   in future HIV-1 vaccine trials.}
 \end{itemize}
 }
 
@@ -173,8 +189,8 @@ risks at the ordered time $t^{(i)}, \ i = 1, \ldots, n$.
 
 \headerbox{Contact Information}{name=ack,column=3,aligned=references,above=bottom}{
 % This block is as tall as the references block
-  \textbf{N.~Hejazi}: \textsc{nhejazi@berkeley.edu} \\
-  \textbf{M.J..~van der Laan}: \textsc{laan@berkeley.edu} \\
+  \textbf{N.S.~Hejazi}: \textsc{nhejazi@berkeley.edu} \\
+  \textbf{M.J.~van der Laan}: \textsc{laan@berkeley.edu} \\
   \textbf{D.~C.~Benkeser}: \textsc{benkeser@emory.edu}
 }
 
@@ -224,33 +240,26 @@ risks at the ordered time $t^{(i)}, \ i = 1, \ldots, n$.
 % This block's bottom aligns with the bottom of the conclusion block
 
 \begin{itemize}
-\item Time origin for all sujects: date of their first or index primary melanoma
-  (PM).
-\item Two hazard functions of essential interest:
-\item $\lambda_1(t)$ --- hazard of an individual, alive at time $t$ who has only
-  experienced one PM.
-\item $\lambda_2(t)$ --- hazard of
-an individual, alive at time $t$ who has experienced more than one PM.
-\item Data: of $n = n_1 + n_2$ subjects.
-\item The first $n_1$ only experience one PM before death at the observed time
-  $t_i$. The other $n_2$ experience a second PM at the observed time $u_j$ and
-  then die at observed time $t_j$. It is possible to consider censored
-  observations for both sets of subjects but we do not discuss this here for the
-  sake of notation.
-\item We compare three approaches of this problem, namely, the Cox proportional
-  hazards model, the method presented in Youlden et al. \cite{youlden2016ten}
-  and its correction by Jewell.
+  \item Consider $O = (W, A, Y) \sim P_0 \in \mathcal{M}$, where no assumptions
+    are placed on the statistical model containing $\mathcal{M}$ containing
+    $P_0$.
+  \item Rather than a deterministic intervention, consider a shift of the
+    treatment (i.e., instead of $A = a$, consider $A = a + \delta$).
+  \item To compare with the general linear model, the shift $\delta$ may be
+    thought of as analogous to shifts in the slope of the regression line.
+  \item To protect against positivity violations, make the shifting mechanism a
+    function of the observed data: $d(a, w) = a + \delta$, if
+    $a + \delta < u(w)$ and $d(a, w) = a$ otherwise.
 \end{itemize}
 
-The basic proportional hazards model is a semi-parametric model for the hazard
-function defined by
+Let's consider a simple statistical target parameter:
 \begin{equation}
-\lambda\left(t; Z = z\right) = \lambda_0(t) \exp\left(\beta^Tz\right), \quad
-t\geq 0.
+\Psi(P) = \mathbb{E}_P{\bar{Q}(d(A, W), W)},
 \end{equation}
-where $\lambda_0(\cdot)$ is the baseline hazard function is estimated
-non-parametrically, while $\beta$ is the vector of regression coefficients and
-is estimated parametrically using Cox's partial likelihood.
+for which the efficient influence function (EIF) is
+\begin{equation}
+D(P)(o) = H(a, w){y - \bar{Q}(a, w)} + \bar{Q}(d(a, w), w) - \Psi(P)
+\end{equation}
 }
 
 %-------------------------------------------------------------------------------
