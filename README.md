@@ -5,8 +5,7 @@
 **Title:** _Robust Nonparametric Inference for Stochastic Interventions Under
 Multi-Stage Sampling_
 
-**Authors:** Nima Hejazi, Mark van der Laan, Holly Janes, Peter Gilbert, David
-Benkeser
+**Authors:** Nima Hejazi, Mark van der Laan, David Benkeser
 
 > Perhaps too often, work in statistical causal inference focuses on the effect
 > of deterministic interventions, under which, for each unit, the magnitude of
