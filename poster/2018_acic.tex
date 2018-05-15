@@ -83,29 +83,26 @@ linewidth=2pt % Width of the border lines around content boxes
 
 \headerbox{Overview \& Motivations}{name=overview,column=0,row=0}{
 
-\begin{enumerate}\compresslist
-\setlength\itemsep{0.5em}
+\begin{itemize}\compresslist
+\setlength\itemsep{0.75em}
 \item We consider the problem of efficiently estimating the effect of a
- stochastic shift interventions for problem settings in which multi-stage
- sampling complicates the observed data structure.
-\item We present a novel approach: an augmented targeted maximum likelihood
- estimator of a parameter defined as the outcome under a stochastic
- intervention with
+ stochastic shift interventions in studies with two-phase sampling of the
+ treatment.
+\item We present an augmented targeted maximum likelihood estimator of a
+  parameter defined as the outcome under a stochastic intervention with
   \begin{itemize}
-    \item consistency and efficiency guarantees even under multi-stage
-      sampling, and
-    \item a form of multiple double robustness inherited from its constituent
-      parts.
+    \item consistency and efficiency guarantees,
+    \item a multiple double robustness property.
   \end{itemize}
-\item The proposed nonparametric estimation procedure provably attains fast
-  convergence rates even when incorporating machine learning estimators.
-\item A recent software implementation --- the ``\textit{txshift}'' R package
-  \cite{hejazi2018txshift} --- has been developed for applying this methodology
-  in complete generality, including for causal inference and variable importance
-  analyses.
-\end{enumerate}
+\item The proposed estimator is asymptotically normal with estimable variance,
+  thereby allowing for the construction of confidence intervals and hypothesis
+  tests.
+\item A new software contribution --- the ``\textit{txshift}'' R package
+  \cite{hejazi2018txshift} --- implements these estimators and leverages
+  state-of-the-art machine learning algorithms in the procedure.
+\end{itemize}
 
-%\vspace{0.3em} % When there are two boxes, some whitespace may need to be added
+\vspace{0.1em} % When there are two boxes, some whitespace may need to be added
                % if the one on the right has more content
 }
 
@@ -118,25 +115,25 @@ linewidth=2pt % Width of the border lines around content boxes
 
 \begin{itemize}\compresslist
 \setlength\itemsep{0.5em}
-\item We illustrate the utility of our approach by applying the new method and
-  software in an investigation of the effects of immune response biomarkers on
-  HIV vaccine efficacy.
-\item \textit{Question of interest:} \textbf{How does risk of HIV infection
-   differ under posited shifts of the distribution of an immune response in the
-   vaccine arm of an efficacy trial?}
+\item We illustrate our approach by applying the method in an investigation of
+  the effects of immune responses on HIV vaccine efficacy.
+\item \underline{\textit{Question:}} \textbf{How does risk of HIV infection
+   differ under shifts of an immune response in the vaccine arm of an efficacy
+   trial?}
 \item We simulate a data structure based on the HVTN 505 HIV-1 efficacy trial,
   as in \cite{janes2017higher}:
   \begin{itemize}
     \itemsep0.5pt
-    \item About 2500 participants, with all observed cases matched to controls.
+    \item About $2500$ participants, with all observed cases matched to
+      controls.
     \item Background $(W)$: sex, age, BMI, etc.
     \item Intervention $(A)$: immunobiomarkers (i.e., T-Cell profiles from ICS
       assays on preserved HIV-1-stimulated PBMCs).
     \item Outcome $(Y)$: HIV-1 infection status.
   \end{itemize}
-\item \textit{Takeaway:} \textbf{Variable importance measure for ranking
-   multiple immune responses by their utility as immunogenicity study endpoints
-   in future HIV-1 vaccine trials.}
+\item \underline{\textit{Takeaway:}} \textbf{Variable importance measure for
+   ranking immune responses by utility as immunogenicity study endpoints in
+   future HIV-1 trials.}
 \end{itemize}
 }
 
@@ -144,34 +141,55 @@ linewidth=2pt % Width of the border lines around content boxes
 % Methodology cont.
 %-------------------------------------------------------------------------------
 
-\headerbox{Methodology II: Corrections for Multi-Stage Sampling}{name=results,
+\headerbox{Methodology II: Corrections for Two-Phase Sampling}{name=results,
   column=2,span=2,row=0}{
 
 \vspace{-0.35em}
 \begin{itemize}
+\itemsep0.1pt
 \item In the HVTN 505 HIV-1 trial, all infected individuals are matched to
-  controls using a complex mechanism, which makes the observed data structure
-  \textbf{$O = (W, \Delta A, Y)$}, where
+  controls using a complex matching mechanism, which makes the observed data
+  structure \textbf{$O = (W, \Delta A, Y)$}.
+  \vspace{-0.25em}
   \begin{itemize}
-    \itemsep0.25pt
-    \item $V = (W, Y)$ is the set of variables defining the sampling mechanism,
+    \itemsep0pt
     \item $\Delta = f(V) \in \{0, 1\}$ is the missingness mechanism introduced
-      by sampling,
-    \item $\Pi_0(V) = \mathbb{P}(\Delta = 1 \mid V)$, letting $\Pi_n(V)$ be an
-      estimator of $\Pi_0(V)$.
+      by sampling, under which the observed immune response ($\Delta A$) is
+      arbitrarily set to $0$ when unobserved.
+    \item We assume that, given $V \coloneqq (W, Y)$, $\Delta$ is Bernoulli
+      distributed with probability $\Pi_0(V)$.
+    %\item $\Pi_0(V) = \mathbb{P}(\Delta = 1 \mid V)$, letting $\Pi_n(V)$ be an
+      %estimator of $\Pi_0(V)$.
   \end{itemize}
-\item An IPCW-TMLE, introduced by \cite{rose2011targeted2sd}, augments the loss
-  function with IPC weights to overcome the problem introduced by sampling:
-  $\mathcal{L}(P_X)(O) = \frac{\Delta}{\Pi_n(V)}\mathcal{L}^F(P_X)(X)$, for full
-  data $X = (W, A, Y)$.
-\item When working in a nonparametric model, the efficient influence function
-  estimating equation is complexified by sampling:
-  $0 = P_n \frac{\Delta}{\Pi_n^*(V)}D^F(P^*_{X,n}) -
-    \left\{\frac{\Delta}{\Pi_n^*(V)} - 1 \right\} \mathbb{E}_n(D^F(P^0_{X,n})
-    \mid \Delta = 1, V)$.
-\item Fortuitously, this augmented estimator exhibits a unique form of
-  \textit{multiple double robustness} --- through combinations of the terms
-  $(g, Q)$ and $(\Pi, \mathbb{E}_0(D^F(P^F) \mid V))$.
+\item The IPCW-TMLE \cite{rose2011targeted2sd} provides an avenue to estimate
+  the target parameter by inverse weighting.
+  %\vspace{-0.25em}
+  %\begin{itemize}
+    %\itemsep0pt
+    %\item IPC weights are used to augment the loss function
+      %$\mathcal{L}(P_0^X)(O) = \frac{\Delta}{\Pi_n(V)}\mathcal{L}^F(P_0^X)(X)$.
+    %\item This procedure corrects for the bias introduced by the two-phase
+      %sampling mechanism.
+  %\end{itemize}
+\item Improvements in the efficiency of the IPCW-TMLE may be attained through a
+  more complex EIF:
+  \begin{equation}
+    0 = P_n \frac{\Delta}{\Pi_n^*(V)}D^F(P^*_{X,n}) -
+      \left\{\frac{\Delta}{\Pi_n^*(V)} - 1 \right\} \mathbb{E}_n(D^F(P^0_{X,n})
+      \mid \Delta = 1, V)
+  \end{equation}
+\item This augmented estimator exhibits several desirable properties
+  \vspace{-0.25em}
+  \begin{itemize}
+    \itemsep0pt
+    \item \textit{efficiency}, achieving the CR lower bound among all
+      asymptotically linear estimators;
+    \item \textit{multiple robustness}, consistency of the parameter estimate
+      when any combination of $(g, Q)$ and
+      $(\Pi, \mathbb{E}_0(D^F(P^F) \mid V))$ is correctly estimated;
+    \item valid statistical inference even when $\Pi_0$ is estimated
+      nonparametrically.
+  \end{itemize}
 \end{itemize}
 }
 
@@ -179,7 +197,7 @@ linewidth=2pt % Width of the border lines around content boxes
 % REFERENCES
 %-------------------------------------------------------------------------------
 
-\headerbox{Principal References}{name=references,column=2,above=bottom}{
+\headerbox{\small References}{name=references,column=2,above=bottom}{
 \renewcommand{\section}[2]{\vskip 0.05em} % remove "References" section title
 \tiny{ % Reduce the font size in this block
 \setlength{\bibsep}{0.25pt}
@@ -195,7 +213,7 @@ linewidth=2pt % Width of the border lines around content boxes
 % CONTACT
 %-------------------------------------------------------------------------------
 
-\headerbox{Contact Information}{name=ack,column=3,aligned=references,above=bottom}{
+\headerbox{\small Contact Information}{name=ack,column=3,aligned=references,above=bottom}{
 % This block is as tall as the references block
 \begin{itemize}
   \itemsep0.25pt
@@ -225,32 +243,34 @@ linewidth=2pt % Width of the border lines around content boxes
 \captionof{figure}{This figure demonstrates...}
 \end{center}
 
-\vspace{-1.75em}
+%\vspace{-1.75em}
 
-\begin{itemize}
-  \itemsep0.05pt
-  \item ...
-  \item ...
-  \item ...
-\end{itemize}
+%\begin{itemize}
+  %\itemsep0.05pt
+  %\item ...
+  %\item ...
+  %\item ...
+%\end{itemize}
 
 \begin{center}
-\vspace*{-0.93cm}  % CHANGE THIS TO ALIGN IMAGES
+\vspace*{-0.8cm}  % CHANGE THIS TO ALIGN IMAGES
 \includegraphics[scale=0.45]{s1_estim_compare}
 \vspace{-1.75em}
 \captionof{figure}{This figure demonstrates...}
 \end{center}
 
-\vspace{-1.75em}
+%\vspace{-1.75em}
 
-\begin{itemize}
-  \itemsep0.05pt
-  \item ...
-  \item ...
-  \item ...
-\end{itemize}
+%\begin{itemize}
+  %\itemsep0.05pt
+  %\item ...
+  %\item ...
+  %\item ...
+%\end{itemize}
 
 \end{multicols}
+
+\vspace{0.35em}
 }
 
 %-------------------------------------------------------------------------------
@@ -263,36 +283,46 @@ linewidth=2pt % Width of the border lines around content boxes
 % This block's bottom aligns with the bottom of the conclusion block
 
 \begin{itemize}
-  \itemsep1pt
-  \item Consider $O = (W, A, Y) \sim P_0 \in \mathcal{M}$, with no assumptions
-    placed on the statistical model $\mathcal{M}$.
+  \itemsep1.5pt
+  \item Consider $X = (W, A, Y) \sim P_0^X \in \mathcal{M}$, where $W$ is a set
+    of baseline covariates, $A$ a treatment, and $Y$ an outcome of interest,
+    with no assumptions placed on the statistical model $\mathcal{M}$.
   \item Rather than a deterministic intervention, consider a shift of the
-    treatment (i.e., instead of $A = a$, consider a shift of the intervention so
-    that $A = a + \delta$ for an aribtrary $\delta$).
-  \item As a comparison with the general linear model, the shift $\delta$ may be
-    thought of as a part of the nonparametric analog to the slope of a
-    regression line --- i.e., $\beta^{\text{NP}}_{\text{slope}} =
-      \frac{\mathbb{E}[Y \mid A + \delta] - \mathbb{E}[Y \mid A]}{\delta^2}$.
-  \item To protect against positivity violations, make the shifting mechanism a
-    function of the observed data: $d(a, w) = a + \delta$, if
-    $a + \delta < u(w)$ and $d(a, w) = a$ otherwise.
+    treatment (i.e., consider a shift of the intervention so that
+    $A = A + \delta$ for a user-specified $\delta$).
+  %\item As a comparison with the general linear model, the shift $\delta$ may be
+    %thought of as a part of the nonparametric analog to the slope of a
+    %regression line --- i.e., $\beta^{\text{NP}}_{\text{slope}} =
+      %\frac{\mathbb{E}[Y \mid A + \delta] - \mathbb{E}[Y \mid A]}{\delta^2}$.
+  \item To protect against violations of the assumption of positivity, the
+    shifting mechanism may be made a function of the observed data:
+    \[ d(a, w) =
+       \begin{cases}
+         a + \delta, & a + \delta < u(w) \\
+         a, & \text{otherwise}
+       \end{cases}
+    \]
+  \item We consider a simple causal target parameter, introduced in
+    \cite{munoz2012population}:
+    \begin{equation}
+    \Psi(P)(X) = \mathbb{E}_{\text{P}}{\overline{Q}(d(A, W), W)},
+    \end{equation}
+    \begin{itemize}
+      \item for which Wald-style inference is attainable through the efficient
+        influence function (EIF), given in \cite{diaz2018stochastic}:
+        \begin{equation}
+          D(P)(o) = H(a, w){y - \overline{Q}(a, w)} + \overline{Q}(d(a, w), w) -
+            \Psi(P)(o),
+        \end{equation}
+      \item where the auxiliary term, $H(a,w)$, may be expressed as
+        \begin{equation}
+          H(a,w) = \mathbb{I}(a < u(w)) \frac{g_0(a - \delta \mid w)}{g_0(a
+            \mid w)} + \mathbb{I}(a \geq u(w) - \delta).
+        \end{equation}
+    \end{itemize}
+%We obtain Wald-style inference via the limiting distribution:
+%$\sqrt{n}(\Psi_n - \Psi) \to N(0, \text{Var}(D(P_0)))$.
 \end{itemize}
-
-We consider a simple causal target parameter, introduced in
-  \cite{munoz2012population}:
-\begin{equation}
-\Psi(P) = \mathbb{E}_{\text{P}}{\overline{Q}(d(A, W), W)},
-\end{equation}
-for which the efficient influence function (EIF), given in
-  \cite{diaz2018stochastic}, is
-\begin{equation}
-D(P)(o) = H(a, w){y - \overline{Q}(a, w)} + \overline{Q}(d(a, w), w) - \Psi(P),
-\end{equation}
-where the auxiliary term, $H(a,w)$, takes the form
-  $H(a,w) = \mathbb{I}(a < u(w)) \frac{g_0(a - \delta \mid w)}{g_0(a \mid w)} +
-    \mathbb{I}(a \geq u(w) - \delta)$.\\[0.5em]
-We obtain Wald-style inference via the limiting distribution:
-$\sqrt{n}(\Psi_n - \Psi) \to N(0, \text{Var}(D(P_0)))$.
 }
 
 %-------------------------------------------------------------------------------
