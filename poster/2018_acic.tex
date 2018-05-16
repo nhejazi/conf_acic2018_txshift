@@ -88,8 +88,8 @@ linewidth=2pt % Width of the border lines around content boxes
 \item We consider the problem of efficiently estimating the effect of a
  stochastic shift interventions in studies with two-phase sampling of the
  treatment.
-\item We present an augmented targeted maximum likelihood estimator of a
-  parameter defined as the outcome under a stochastic intervention with
+\item We present an estimator of the average counterfactual outcome under a
+  stochastic shift intervention with
   \begin{itemize}
     \item consistency and efficiency guarantees,
     \item a multiple double robustness property.
@@ -97,13 +97,12 @@ linewidth=2pt % Width of the border lines around content boxes
 \item The proposed estimator is asymptotically normal with estimable variance,
   thereby allowing for the construction of confidence intervals and hypothesis
   tests.
-\item A new software contribution --- the ``\textit{txshift}'' R package
-  \cite{hejazi2018txshift} --- implements these estimators and leverages
-  state-of-the-art machine learning algorithms in the procedure.
+\item The \underline{\textit{txshift} R package} \cite{hejazi2018txshift}
+  implements these estimators and leverages state-of-the-art machine learning in
+  the procedure.
 \end{itemize}
-
-\vspace{0.1em} % When there are two boxes, some whitespace may need to be added
-               % if the one on the right has more content
+\vspace{0.65cm} % When there are two boxes, some whitespace may need to be added
+                % if the one on the right has more content
 }
 
 %-------------------------------------------------------------------------------
@@ -115,25 +114,24 @@ linewidth=2pt % Width of the border lines around content boxes
 
 \begin{itemize}\compresslist
 \setlength\itemsep{0.5em}
-\item We illustrate our approach by applying the method in an investigation of
-  the effects of immune responses on HIV vaccine efficacy.
+\item Our approach is motivated by application to investigations of the effects
+  of immune responses on HIV vaccine efficacy.
 \item \underline{\textit{Question:}} \textbf{How does risk of HIV infection
    differ under shifts of an immune response in the vaccine arm of an efficacy
    trial?}
 \item We simulate a data structure based on the HVTN 505 HIV-1 efficacy trial,
   as in \cite{janes2017higher}:
   \begin{itemize}
-    \itemsep0.5pt
-    \item About $2500$ participants, with all observed cases matched to
-      controls.
+    \itemsep0.25pt
+    \item $2504$ participants, with all observed cases matched to controls.
     \item Background $(W)$: sex, age, BMI, etc.
     \item Intervention $(A)$: immunobiomarkers (i.e., T-Cell profiles from ICS
       assays on preserved HIV-1-stimulated PBMCs).
     \item Outcome $(Y)$: HIV-1 infection status.
   \end{itemize}
 \item \underline{\textit{Takeaway:}} \textbf{Variable importance measure for
-   ranking immune responses by utility as immunogenicity study endpoints in
-   future HIV-1 trials.}
+   ranking immune responses by utility as immunogenicity study endpoints in all
+   future HIV-1 vaccine efficacy trials.}
 \end{itemize}
 }
 
@@ -153,7 +151,7 @@ linewidth=2pt % Width of the border lines around content boxes
   \vspace{-0.25em}
   \begin{itemize}
     \itemsep0pt
-    \item $\Delta = f(V) \in \{0, 1\}$ is the missingness mechanism introduced
+    \item $\Delta \in \{0, 1\}$ is the missingness mechanism introduced
       by sampling, under which the observed immune response ($\Delta A$) is
       arbitrarily set to $0$ when unobserved.
     \item We assume that, given $V \coloneqq (W, Y)$, $\Delta$ is Bernoulli
@@ -182,11 +180,11 @@ linewidth=2pt % Width of the border lines around content boxes
   \vspace{-0.25em}
   \begin{itemize}
     \itemsep0pt
-    \item \textit{efficiency}, achieving the CR lower bound among all
+    \item \textit{efficiency}, achieving the CR bound for the class of regular
       asymptotically linear estimators;
     \item \textit{multiple robustness}, consistency of the parameter estimate
-      when any combination of $(g, Q)$ and
-      $(\Pi, \mathbb{E}_0(D^F(P^F) \mid V))$ is correctly estimated;
+      when one of $(g, Q)$ and one of $(\Pi, \mathbb{E}_0(D^F(P^F) \mid V))$ is
+      consistently estimated;
     \item valid statistical inference even when $\Pi_0$ is estimated
       nonparametrically.
   \end{itemize}
@@ -283,43 +281,41 @@ linewidth=2pt % Width of the border lines around content boxes
 % This block's bottom aligns with the bottom of the conclusion block
 
 \begin{itemize}
-  \itemsep1.5pt
+  \itemsep0.75pt
   \item Consider $X = (W, A, Y) \sim P_0^X \in \mathcal{M}$, where $W$ is a set
     of baseline covariates, $A$ a treatment, and $Y$ an outcome of interest,
     with no assumptions placed on the statistical model $\mathcal{M}$.
   \item Rather than a deterministic intervention, consider a shift of the
-    treatment (i.e., consider a shift of the intervention so that
-    $A = A + \delta$ for a user-specified $\delta$).
+    treatment so that $A = A + \delta$ for a user-specified shift $\delta$.
   %\item As a comparison with the general linear model, the shift $\delta$ may be
     %thought of as a part of the nonparametric analog to the slope of a
     %regression line --- i.e., $\beta^{\text{NP}}_{\text{slope}} =
       %\frac{\mathbb{E}[Y \mid A + \delta] - \mathbb{E}[Y \mid A]}{\delta^2}$.
   \item To protect against violations of the assumption of positivity, the
-    shifting mechanism may be made a function of the observed data:
+    shifting mechanism may be made a function of the observed data, where
+    $u(w)$ is the maximum shift with support in the data:
     \[ d(a, w) =
        \begin{cases}
          a + \delta, & a + \delta < u(w) \\
          a, & \text{otherwise}
        \end{cases}
     \]
-  \item We consider a simple causal target parameter, introduced in
-    \cite{munoz2012population}:
+  \item The causal parameter is identified by the observed data parameter,
+    introduced in \cite{munoz2012population}:
     \begin{equation}
-    \Psi(P)(X) = \mathbb{E}_{\text{P}}{\overline{Q}(d(A, W), W)},
+      \Psi(P_0) = \mathbb{E}_{\text{P}_0}{\overline{Q}(d(A, W), W)}.
     \end{equation}
-    \begin{itemize}
-      \item for which Wald-style inference is attainable through the efficient
-        influence function (EIF), given in \cite{diaz2018stochastic}:
+  \item The efficient influence function (EIF), given in
+    \cite{diaz2018stochastic}, is
         \begin{equation}
-          D(P)(o) = H(a, w){y - \overline{Q}(a, w)} + \overline{Q}(d(a, w), w) -
-            \Psi(P)(o),
+          D^F(P_0^X)(x) = H(a, w){y - \overline{Q}(a, w)} +
+            \overline{Q}(d(a, w), w) - \Psi(P_0^X)(x),
         \end{equation}
-      \item where the auxiliary term, $H(a,w)$, may be expressed as
+      where the auxiliary term, $H(a,w)$, may be expressed as
         \begin{equation}
           H(a,w) = \mathbb{I}(a < u(w)) \frac{g_0(a - \delta \mid w)}{g_0(a
             \mid w)} + \mathbb{I}(a \geq u(w) - \delta).
         \end{equation}
-    \end{itemize}
 %We obtain Wald-style inference via the limiting distribution:
 %$\sqrt{n}(\Psi_n - \Psi) \to N(0, \text{Var}(D(P_0)))$.
 \end{itemize}
