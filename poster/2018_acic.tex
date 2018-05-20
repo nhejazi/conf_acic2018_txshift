@@ -69,7 +69,7 @@ linewidth=2pt % Width of the border lines around content boxes
 %
 {\includegraphics[height=6.5em]{logo_berkeley.jpg}} % First university/lab logo on the left
 {\bf\textit{\LARGE Robust Nonparametric Inference for Stochastic Interventions
-    Under Multi-Stage Sampling}\vspace{0.01em}} % Poster title
+    under Multi-Stage Sampling}\vspace{0.01em}} % Poster title
 {\textbf{Nima S.~Hejazi, Mark J.~van der Laan, and David C.~Benkeser} \\
   \textit{Group in Biostatistics \& Department of Statistics, University of
     California, Berkeley} \\
@@ -147,10 +147,12 @@ linewidth=2pt % Width of the border lines around content boxes
 \itemsep0.1pt
 \item In the HVTN 505 HIV-1 trial, all infected individuals are matched to
   controls using a complex matching mechanism, which makes the observed data
-  structure \textbf{$O = (W, \Delta A, Y)$}.
+  structure \textbf{$O = (W, \Delta A, Y) \sim P_0$}.
   \vspace{-0.25em}
   \begin{itemize}
     \itemsep0pt
+    %\item Here, $P_0$ is the distribution of the observed data while $P_0^X$ is
+      %the distribution of the full data.
     \item $\Delta \in \{0, 1\}$ is the missingness mechanism introduced
       by sampling, under which the observed immune response ($\Delta A$) is
       arbitrarily set to $0$ when unobserved.
@@ -171,11 +173,14 @@ linewidth=2pt % Width of the border lines around content boxes
   %\end{itemize}
 \item Improvements in the efficiency of the IPCW-TMLE may be attained through a
   more complex EIF:
-  \begin{equation}
-    0 = P_n \frac{\Delta}{\Pi_n^*(V)}D^F(P^*_{X,n}) -
+  %Here, we need to define the EIF of \Psi relative to the observed data model.
+  %We can define this at P_0, i.e., at Pi_0, Q_0, g_0 etc...
+  %The EIF at P_0 maps an observation to a number, so we define giving it an
+  %arbitrary observation from P_0, say o = (w, \delta a, y).
+  %Then we can write D(P_0)
+  $$ 0 = P_n \frac{\Delta}{\Pi_n^*(V)}D^F(P^*_{X,n}) -
       \left\{\frac{\Delta}{\Pi_n^*(V)} - 1 \right\} \mathbb{E}_n(D^F(P^0_{X,n})
-      \mid \Delta = 1, V)
-  \end{equation}
+      \mid \Delta = 1, V)$$
 \item This augmented estimator exhibits several desirable properties
   \vspace{-0.25em}
   \begin{itemize}
@@ -183,8 +188,8 @@ linewidth=2pt % Width of the border lines around content boxes
     \item \textit{efficiency}, achieving the CR bound for the class of regular
       asymptotically linear estimators;
     \item \textit{multiple robustness}, consistency of the parameter estimate
-      when one of $(g, Q)$ and one of $(\Pi, \mathbb{E}_0(D^F(P^F) \mid V))$ is
-      consistently estimated;
+      when one of $(g, Q)$ and one of $(\Pi, \mathbb{E}_0(D^F(P^F) \mid
+      \Delta = 1, V))$ is consistently estimated;
     \item valid statistical inference even when $\Pi_0$ is estimated
       nonparametrically.
   \end{itemize}
@@ -228,7 +233,7 @@ linewidth=2pt % Width of the border lines around content boxes
 % CONCLUSION
 %-------------------------------------------------------------------------------
 
-\headerbox{Results \& Discussion}
+\headerbox{Results}
 {name=conclusion,column=2,span=2,row=0,below=results,above=references}{
 
 \vspace{0.25em}
@@ -236,9 +241,9 @@ linewidth=2pt % Width of the border lines around content boxes
 
 \begin{center}
 \vspace*{-0.5cm}
-\includegraphics[scale=0.45]{s1_estim_compare}
-\vspace{-1.75em}
-\captionof{figure}{This figure demonstrates...}
+\includegraphics[scale=0.37]{bias_composed_plot}
+%\vspace{-1.75em}
+%\captionof{figure}{This figure demonstrates...}
 \end{center}
 
 %\vspace{-1.75em}
@@ -251,10 +256,10 @@ linewidth=2pt % Width of the border lines around content boxes
 %\end{itemize}
 
 \begin{center}
-\vspace*{-0.8cm}  % CHANGE THIS TO ALIGN IMAGES
-\includegraphics[scale=0.45]{s1_estim_compare}
-\vspace{-1.75em}
-\captionof{figure}{This figure demonstrates...}
+\vspace*{-0.65cm}  % CHANGE THIS TO ALIGN IMAGES
+\includegraphics[scale=0.37]{rel_efficiency_plot}
+%\vspace{-1.75em}
+%\captionof{figure}{This figure demonstrates...}
 \end{center}
 
 %\vspace{-1.75em}
@@ -303,12 +308,12 @@ linewidth=2pt % Width of the border lines around content boxes
   \item The causal parameter is identified by the observed data parameter,
     introduced in \cite{munoz2012population}:
     \begin{equation}
-      \Psi(P_0) = \mathbb{E}_{\text{P}_0}{\overline{Q}(d(A, W), W)}.
+      \Psi(P_0^X) = \mathbb{E}_{\text{P}_0}{\overline{Q}(d(A, W), W)}.
     \end{equation}
-  \item The efficient influence function (EIF), given in
-    \cite{diaz2018stochastic}, is
+  \item The efficient influence function (EIF) of $\Psi$ relative to a
+    nonparametric model is
         \begin{equation}
-          D^F(P_0^X)(x) = H(a, w){y - \overline{Q}(a, w)} +
+          D^F(P_0^X)(x) = H(a, w)({y - \overline{Q}(a, w)}) +
             \overline{Q}(d(a, w), w) - \Psi(P_0^X)(x),
         \end{equation}
       where the auxiliary term, $H(a,w)$, may be expressed as
