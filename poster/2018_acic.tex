@@ -144,10 +144,10 @@ linewidth=2pt % Width of the border lines around content boxes
 
 \vspace{-0.35em}
 \begin{itemize}
-\itemsep0.1pt
-\item In the HVTN 505 HIV-1 trial, all infected individuals are matched to
-  controls using a complex matching mechanism, which makes the observed data
-  structure \textbf{$O = (W, \Delta A, Y) \sim P_0$}.
+\itemsep0pt
+\item In the HVTN 505 HIV-1 trial, all infected participants and the matched
+  subset of controls have $A$ (immunobiomarkers) measured, thus making the
+  observed data structure \textbf{$O = (W, \Delta A, Y) \sim P_0$}.
   \vspace{-0.25em}
   \begin{itemize}
     \itemsep0pt
@@ -161,8 +161,8 @@ linewidth=2pt % Width of the border lines around content boxes
     %\item $\Pi_0(V) = \mathbb{P}(\Delta = 1 \mid V)$, letting $\Pi_n(V)$ be an
       %estimator of $\Pi_0(V)$.
   \end{itemize}
-\item The IPCW-TMLE \cite{rose2011targeted2sd} provides an avenue to estimate
-  the target parameter by inverse weighting.
+\item The IPCW-TMLE \cite{rose2011targeted2sd} estimates the target parameter by
+  adding \textit{inverse weights} to the loss function.
   %\vspace{-0.25em}
   %\begin{itemize}
     %\itemsep0pt
@@ -171,16 +171,11 @@ linewidth=2pt % Width of the border lines around content boxes
     %\item This procedure corrects for the bias introduced by the two-phase
       %sampling mechanism.
   %\end{itemize}
-\item Improvements in the efficiency of the IPCW-TMLE may be attained through a
-  more complex EIF:
-  %Here, we need to define the EIF of \Psi relative to the observed data model.
-  %We can define this at P_0, i.e., at Pi_0, Q_0, g_0 etc...
-  %The EIF at P_0 maps an observation to a number, so we define giving it an
-  %arbitrary observation from P_0, say o = (w, \delta a, y).
-  %Then we can write D(P_0)
-  $$ 0 = P_n \frac{\Delta}{\Pi_n^*(V)}D^F(P^*_{X,n}) -
-      \left\{\frac{\Delta}{\Pi_n^*(V)} - 1 \right\} \mathbb{E}_n(D^F(P^0_{X,n})
-      \mid \Delta = 1, V)$$
+\item Improvements in the efficiency are attainable using a TMLE based on the
+  EIF:
+  $$ D(P_0)(o) = \frac{\Delta}{\Pi(v)} D^F(P_0^X)(x) - \left(1 -
+    \frac{\Delta}{\Pi(v)}\right)\mathbb{E}(D^F(P_0^X)(x) \mid \Delta = 1,
+    V = v)$$
 \item This augmented estimator exhibits several desirable properties
   \vspace{-0.25em}
   \begin{itemize}
@@ -188,9 +183,9 @@ linewidth=2pt % Width of the border lines around content boxes
     \item \textit{efficiency}, achieving the CR bound for the class of regular
       asymptotically linear estimators;
     \item \textit{multiple robustness}, consistency of the parameter estimate
-      when one of $(g, Q)$ and one of $(\Pi, \mathbb{E}_0(D^F(P^F) \mid
+      when one of $(g, Q)$ and one of $(\Pi, \mathbb{E}_0(D^F(P_0^X)(X) \mid
       \Delta = 1, V))$ is consistently estimated;
-    \item valid statistical inference even when $\Pi_0$ is estimated
+    \item valid statistical inference even when $\Pi$ is estimated
       nonparametrically.
   \end{itemize}
 \end{itemize}
@@ -233,47 +228,36 @@ linewidth=2pt % Width of the border lines around content boxes
 % CONCLUSION
 %-------------------------------------------------------------------------------
 
-\headerbox{Results}
+\headerbox{Results \& Discussion}
 {name=conclusion,column=2,span=2,row=0,below=results,above=references}{
 
 \vspace{0.25em}
+
 \begin{multicols}{2}
 
 \begin{center}
 \vspace*{-0.5cm}
 \includegraphics[scale=0.37]{bias_composed_plot}
-%\vspace{-1.75em}
 %\captionof{figure}{This figure demonstrates...}
 \end{center}
-
-%\vspace{-1.75em}
-
-%\begin{itemize}
-  %\itemsep0.05pt
-  %\item ...
-  %\item ...
-  %\item ...
-%\end{itemize}
 
 \begin{center}
-\vspace*{-0.65cm}  % CHANGE THIS TO ALIGN IMAGES
-\includegraphics[scale=0.37]{rel_efficiency_plot}
-%\vspace{-1.75em}
+%\vspace*{-0.49cm}  % CHANGE THIS TO ALIGN IMAGES
+\includegraphics[scale=0.39]{rel_eff_composed_plot}
 %\captionof{figure}{This figure demonstrates...}
 \end{center}
 
-%\vspace{-1.75em}
+\vspace{-15pt}
 
-%\begin{itemize}
-  %\itemsep0.05pt
-  %\item ...
-  %\item ...
-  %\item ...
-%\end{itemize}
+\begin{itemize}
+  \itemsep0pt
+  \item All estimators approx.~unbiased in large samples; however, inefficient
+    TMLE with HAL has bias not converging at $n^{-\frac{1}{2}}$.
+  \item Fitting $\Pi$ with HAL or GLM, efficient TMLE has lower variance than
+    the inefficient.\\
+\end{itemize}
 
 \end{multicols}
-
-\vspace{0.35em}
 }
 
 %-------------------------------------------------------------------------------
@@ -290,8 +274,8 @@ linewidth=2pt % Width of the border lines around content boxes
   \item Consider $X = (W, A, Y) \sim P_0^X \in \mathcal{M}$, where $W$ is a set
     of baseline covariates, $A$ a treatment, and $Y$ an outcome of interest,
     with no assumptions placed on the statistical model $\mathcal{M}$.
-  \item Rather than a deterministic intervention, consider a shift of the
-    treatment so that $A = A + \delta$ for a user-specified shift $\delta$.
+  \item Consider a shift of the treatment (i.e., $d(A, W)$) so that
+    $A = A + \delta$ for a user-specified shift $\delta$.
   %\item As a comparison with the general linear model, the shift $\delta$ may be
     %thought of as a part of the nonparametric analog to the slope of a
     %regression line --- i.e., $\beta^{\text{NP}}_{\text{slope}} =
@@ -305,11 +289,13 @@ linewidth=2pt % Width of the border lines around content boxes
          a, & \text{otherwise}
        \end{cases}
     \]
-  \item The causal parameter is identified by the observed data parameter,
-    introduced in \cite{munoz2012population}:
+  \item The causal parameter is identified by the observed data parameter
+    \cite{munoz2012population}:
     \begin{equation}
-      \Psi(P_0^X) = \mathbb{E}_{\text{P}_0}{\overline{Q}(d(A, W), W)}.
+      \Psi(P_0^X) = \mathbb{E}_{\text{P}_0}{\overline{Q}(d(A, W), W)},
     \end{equation}
+    where $\overline{Q}(d(A, W), W)$ is the conditional mean of the outcome
+    given $A = d(A,W)$ and $W$.
   \item The efficient influence function (EIF) of $\Psi$ relative to a
     nonparametric model is
         \begin{equation}
@@ -318,8 +304,8 @@ linewidth=2pt % Width of the border lines around content boxes
         \end{equation}
       where the auxiliary term, $H(a,w)$, may be expressed as
         \begin{equation}
-          H(a,w) = \mathbb{I}(a < u(w)) \frac{g_0(a - \delta \mid w)}{g_0(a
-            \mid w)} + \mathbb{I}(a \geq u(w) - \delta).
+          H(a,w) = \mathbb{I}(a < u(w)) \frac{g(a - \delta \mid w)}{g(a \mid w)}
+            + \mathbb{I}(a \geq u(w) - \delta).
         \end{equation}
 %We obtain Wald-style inference via the limiting distribution:
 %$\sqrt{n}(\Psi_n - \Psi) \to N(0, \text{Var}(D(P_0)))$.
