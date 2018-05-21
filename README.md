@@ -1,11 +1,11 @@
-# ACIC 2018 Poster Submission
+# ACIC 2018 Poster
 
 ## Abstract
 
 **Title:** _Robust Nonparametric Inference for Stochastic Interventions Under
 Multi-Stage Sampling_
 
-**Authors:** Nima Hejazi, Mark van der Laan, David Benkeser
+**Authors:** Nima S. Hejazi, Mark J. van der Laan, David C. Benkeser
 
 > Perhaps too often, work in statistical causal inference focuses on the effect
 > of deterministic interventions, under which, for each unit, the magnitude of
@@ -46,8 +46,17 @@ Multi-Stage Sampling_
 
 ---
 
+## Related Work
+
+* `txshift` R package:
+   * GitHub repository: https://github.com/nhejazi/txshift
+   * Documentation site: http://code.nimahejazi.org/txshift
+
+---
+
 ## License
 
-&copy; 2018 [Nima Hejazi](https://statistics.berkeley.edu/~nhejazi) and [David
+&copy; 2018 [Nima Hejazi](https://statistics.berkeley.edu/~nhejazi), [Mark van
+der Laan](https://vanderlaan-lab.org), and [David
 Benkeser](https://www.benkeserstatistics.com/)
 
